@@ -1,44 +1,3 @@
-"""
-# Numerical Methods in Image Processing: Face Blurring Application
-
-## Abstract
-This project explores the application of numerical methods in image processing to selectively 
-blur faces in digital images while preserving the rest of the scene. The proposed solution 
-combines face detection (using Haar Cascades) with convolution-based Gaussian blurring, 
-a numerical technique for spatial filtering. The implementation leverages OpenCV for efficient 
-matrix operations and compares the computational efficiency of numerical convolution against 
-analytical methods such as Fourier-domain filtering.
-
-## 1. Introduction
-Image processing has become an essential field with applications ranging from medical imaging 
-to surveillance. One key operation in this field is spatial filtering, often used to enhance 
-or modify images. Gaussian blurring is a widely-used spatial filtering technique that smooths 
-images and reduces noise. Numerical methods, particularly convolution operations, allow for 
-efficient and practical implementation of these filters. Additionally, face detection algorithms, 
-such as those based on Haar Cascades [1], enable targeted processing of specific image regions. 
-In this project, we investigate the use of numerical convolution methods for selectively blurring 
-faces in images, preserving the rest of the scene intact.
-
-## 2. Problem Definition
-The project's main objective is to develop a method to blur faces in a digital image using 
-numerical techniques. Mathematically, the Gaussian blur of an image I(x,y) can be represented 
-as the convolution:
-G(x,y) = (I * K)(x,y) = Σ(i=-k to k) Σ(j=-k to k) I(x-i, y-j)K(i,j),
-where K(i,j) is the Gaussian kernel, and (x,y) denotes pixel coordinates. Face regions are 
-first detected and then selectively processed with the convolution operation, while non-face 
-areas remain unchanged.
-
-## 3. Methodology
-The proposed solution involves the following steps:
-1. Face Detection: Utilize Haar Cascade classifiers to detect face regions in the input image.
-2. Gaussian Blur: Apply a 2D Gaussian convolution filter only to the detected face regions. 
-   The Gaussian kernel is numerically constructed.
-3. Software Tools: The implementation is carried out using OpenCV.
-4. Comparison: Analyze the computational efficiency of the numerical convolution approach and 
-   compare it with theoretical analytical methods like Fourier-domain filtering.
-"""
-
-# Importing libraries 
 import numpy as np 
 import cv2 
 import matplotlib.pyplot as plt
@@ -58,17 +17,6 @@ def plotImages(img, title=None):
 
 # Function to create a Gaussian kernel
 def create_gaussian_kernel(size, sigma):
-    """
-    Create a 2D Gaussian kernel using numerical methods.
-    
-    Args:
-        size: Kernel size (odd number)
-        sigma: Standard deviation of the Gaussian
-        
-    Returns:
-        2D Gaussian kernel
-    """
-    # Ensure size is odd
     if size % 2 == 0:
         size += 1
         
@@ -84,17 +32,6 @@ def create_gaussian_kernel(size, sigma):
 
 # Function to apply Gaussian blur using numerical convolution
 def gaussian_blur_convolution(image, kernel_size, sigma):
-    """
-    Apply Gaussian blur using numerical convolution.
-    
-    Args:
-        image: Input image
-        kernel_size: Size of the Gaussian kernel
-        sigma: Standard deviation of the Gaussian
-        
-    Returns:
-        Blurred image
-    """
     # Create the Gaussian kernel
     kernel = create_gaussian_kernel(kernel_size, sigma)
     
@@ -109,17 +46,6 @@ def gaussian_blur_convolution(image, kernel_size, sigma):
 
 # Function to apply Gaussian blur using Fourier transform (analytical method)
 def gaussian_blur_fourier(image, kernel_size, sigma):
-    """
-    Apply Gaussian blur using Fourier transform (analytical method).
-    
-    Args:
-        image: Input image
-        kernel_size: Size of the Gaussian kernel
-        sigma: Standard deviation of the Gaussian
-        
-    Returns:
-        Blurred image
-    """
     # For simplicity and robustness, we'll use scipy's implementation
     # which handles the Fourier transform details correctly
     if len(image.shape) == 3:
@@ -220,17 +146,6 @@ def main():
         abs(fourier_time/conv_time), 
         "slower" if fourier_time > conv_time else "faster"
     ))
-    
-    # Conclusion
-    print("\n--- Conclusion ---")
-    print("This project demonstrates the application of numerical methods in image processing.")
-    print("We implemented and compared different approaches to Gaussian blurring:")
-    print("1. OpenCV's optimized implementation")
-    print("2. Direct numerical convolution")
-    print("3. Analytical method using Fourier domain filtering")
-    print("\nThe results show the trade-offs between computational efficiency and implementation complexity.")
-    print("While OpenCV's implementation is the fastest due to its optimized C++ backend,")
-    print("our numerical methods provide insights into the mathematical foundations of image processing algorithms.")
 
 # Execute the main function
 if __name__ == "__main__":
