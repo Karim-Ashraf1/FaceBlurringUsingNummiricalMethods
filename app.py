@@ -1,7 +1,6 @@
 import os
 import cv2
 import numpy as np
-import time
 from scipy import ndimage
 from flask import Flask, request, render_template, redirect, url_for, flash
 import base64
@@ -28,11 +27,17 @@ def create_gaussian_kernel(size, sigma):
 
 
 def gaussian_blur_convolution(image, kernel_size, sigma):
-    # Create Gaussian kernel
+    # Create the Gaussian kernel
     kernel = create_gaussian_kernel(kernel_size, sigma)
 
-    # Apply convolution
-    return ndimage.convolve(image, kernel, mode='reflect')
+    # Apply convolution to each channel separately if the image is colored
+    if len(image.shape) == 3:
+        result = np.zeros_like(image)
+        for i in range(3):
+            result[:, :, i] = ndimage.convolve(image[:, :, i], kernel)
+        return result
+    else:
+        return ndimage.convolve(image, kernel)
 
 # Function to apply Gaussian blur using Fourier transform (analytical method)
 
@@ -90,28 +95,33 @@ def process_image(image_path):
     # Create copies for each method
     image_cv2 = image.copy()
     image_conv = image.copy()
+    image_fourier = image.copy()
 
     results = {}
 
     # Method 1: OpenCV's GaussianBlur
-    start_time_cv2 = time.time()
     for (x, y, w, h) in face_data:
         cv2.rectangle(image_cv2, (x, y), (x + w, y + h), (0, 255, 0), 2)
         roi = image_cv2[y:y+h, x:x+w]
         roi = cv2.GaussianBlur(roi, (23, 23), 30)
         image_cv2[y:y+roi.shape[0], x:x+roi.shape[1]] = roi
-    cv2_time = time.time() - start_time_cv2
-    results['opencv'] = {'image': image_cv2, 'time': cv2_time}
+    results['opencv'] = {'image': image_cv2}
 
     # Method 2: Custom convolution
-    start_time_conv = time.time()
     for (x, y, w, h) in face_data:
         cv2.rectangle(image_conv, (x, y), (x + w, y + h), (0, 255, 0), 2)
         roi = image_conv[y:y+h, x:x+w]
         roi = gaussian_blur_convolution(roi, 23, 30)
         image_conv[y:y+roi.shape[0], x:x+roi.shape[1]] = roi
-    conv_time = time.time() - start_time_conv
-    results['convolution'] = {'image': image_conv, 'time': conv_time}
+    results['convolution'] = {'image': image_conv}
+
+    # Method 3: Fourier domain
+    for (x, y, w, h) in face_data:
+        cv2.rectangle(image_fourier, (x, y), (x + w, y + h), (0, 255, 0), 2)
+        roi = image_fourier[y:y+h, x:x+w]
+        roi = gaussian_blur_fourier(roi, 23, 30)
+        image_fourier[y:y+roi.shape[0], x:x+roi.shape[1]] = roi
+    results['fourier'] = {'image': image_fourier}
 
     # Save the results
     image_results = {}
@@ -128,8 +138,7 @@ def process_image(image_path):
         img_base64 = base64.b64encode(buffer).decode('utf-8')
 
         image_results[method] = {
-            'img_src': f"data:image/jpeg;base64,{img_base64}",
-            'time': f"{data['time']:.4f} seconds"
+            'img_src': f"data:image/jpeg;base64,{img_base64}"
         }
 
     return image_results, None
@@ -141,7 +150,7 @@ def index():
         # Check if the post request has the file part
         if 'file' not in request.files:
             flash('No file part')
-            return redirect(url_for('simple_upload'))
+            return redirect(request.url)
 
         file = request.files['file']
 
