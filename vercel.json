@@ -12,7 +12,18 @@
     },
     {
       "src": "static/**",
-      "use": "@vercel/static"
+      "use": "@vercel/static",
+      "config": {
+        "exclude": [
+          "uploads/**",
+          "results/**",
+          "*.xml",
+          "*.h5",
+          "*.pkl",
+          "*.model",
+          "*.weights"
+        ]
+      }
     }
   ],
   "routes": [

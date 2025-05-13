@@ -16,6 +16,7 @@ lib64/
 parts/
 sdist/
 var/
+wheels/
 *.egg-info/
 .installed.cfg
 *.egg
@@ -34,11 +35,23 @@ ENV/
 
 # Temporary files
 /tmp
-static/uploads/
-static/results/
+static/uploads/*
+static/results/*
+!static/uploads/.gitkeep
+!static/results/.gitkeep
 
 # IDEs and editors
 .idea/
 .vscode/
 *.swp
-*.swo 
+*.swo
+
+# Large files
+*.xml
+*.h5
+*.pkl
+*.model
+*.weights
+
+# Logs
+*.log 
