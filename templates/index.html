@@ -26,7 +26,6 @@
 
         <form method="POST" enctype="multipart/form-data">
             <div class="mb-4">
-                <p>Upload an image containing faces to see the blurring methods in action:</p>
                 <div class="upload-area" id="uploadArea">
                     <p>Click to select an image or drag and drop here</p>
                     <input type="file" name="file" id="file" class="visually-hidden" accept=".jpg,.jpeg,.png">
@@ -41,11 +40,11 @@
             <p class="text-muted">
                 This application demonstrates three different face blurring methods:
             </p>
-            <ul class="text-muted">
-                <li>OpenCV's GaussianBlur</li>
-                <li>Custom Numerical Convolution</li>
-                <li>Fourier Domain Filtering</li>
-            </ul>
+            <div class="methods-container">
+                <div class="method-item">OpenCV's GaussianBlur</div>
+                <div class="method-item">Custom Numerical Convolution</div>
+                <div class="method-item">Fourier Domain Filtering</div>
+            </div>
         </div>
     </div>
 
@@ -114,6 +113,11 @@
             }
         });
     </script>
+    <footer class="footer">
+        <div class="container">
+            <p class="text-center">© 2024 Bluro. Made by Zeyad Waleed, Karim Ashraf, Ahmed Khaleed, Ahmed Taha</p>
+        </div>
+    </footer>
 </body>
 
 </html>
