@@ -49,7 +49,6 @@ def gaussian_blur_convolution(image, kernel_size, sigma):
 
 def gaussian_blur_fourier(image, kernel_size, sigma):
     # For simplicity and robustness, we'll use scipy's implementation
-    # which handles the Fourier transform details correctly
     if len(image.shape) == 3:
         result = np.zeros_like(image)
         for i in range(3):
@@ -199,11 +198,11 @@ def index():
 def simple_upload():
     return render_template('fallback.html')
 
-# For Vercel serverless function
+# Vercel serverless function handler
 
 
-def handler(request):
-    return app(request.environ, Response)
+def handler(environ, start_response):
+    return app(environ, start_response)
 
 
 # For local development
