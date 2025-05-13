@@ -2,11 +2,11 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/index-lite.py",
+      "src": "api/index-minimal.py",
       "use": "@vercel/python",
       "config": {
-        "maxLambdaSize": "10mb",
-        "memory": 512,
+        "maxLambdaSize": "5mb",
+        "memory": 256,
         "maxDuration": 10,
         "runtime": "python3.12"
       }
@@ -15,7 +15,7 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "api/index-lite.py"
+      "dest": "api/index-minimal.py"
     }
   ]
 } 

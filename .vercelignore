@@ -36,8 +36,13 @@ static/results/*
 README.md
 VERCEL_DEPLOYMENT.md
 
-# Example images (if large)
+# Example images and other files (if large)
 *.jpg
 *.jpeg
 *.png
-!haarcascade_frontalface_alt.xml 
+project.py
+api/index.py
+api/index-lite.py
+
+# Resource intensive models
+haarcascade_frontalface_alt.xml 
