@@ -158,7 +158,7 @@ def index():
         # Check if the post request has the file part
         if 'file' not in request.files:
             flash('No file part')
-            return redirect(url_for('simple_upload'))
+            return redirect(request.url)
 
         file = request.files['file']
 
@@ -187,11 +187,6 @@ def index():
                                    results=results)
 
     return render_template('index.html')
-
-
-@app.route('/simple-upload', methods=['GET'])
-def simple_upload():
-    return render_template('fallback.html')
 
 
 if __name__ == '__main__':
