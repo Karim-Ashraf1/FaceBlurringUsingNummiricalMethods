@@ -61,9 +61,10 @@ def main():
     
     # Reading an image using OpenCV 
     # OpenCV reads images by default in BGR format 
-    image = cv2.imread('my_img.jpg') 
+    image_path = 'download.jpeg'
+    image = cv2.imread(image_path) 
     if image is None:
-        print("Error: Could not read image file 'my_img.jpg'")
+        print("Error: Could not read image file -> ", image_path)
         return
         
     # Converting BGR image into a RGB image 
