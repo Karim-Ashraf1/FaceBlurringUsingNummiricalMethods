@@ -5,7 +5,6 @@ import seaborn as sns
 import time
 from scipy import ndimage, fft
 
-
 # A function for plotting the images 
 def plotImages(img, title=None): 
     plt.figure(figsize=(10, 8))
