@@ -147,4 +147,4 @@ def simple_upload():
     return render_template('fallback.html')
 
 # For Vercel deployment, we need to export the Flask app
-app.debug = False 
+app.debug = False
