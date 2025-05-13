@@ -17,17 +17,27 @@
         "exclude": [
           "uploads/**",
           "results/**",
-          "*.xml",
-          "*.h5",
-          "*.pkl",
-          "*.model",
-          "*.weights",
-          "*.jpg",
-          "*.jpeg",
-          "*.png",
-          "*.gif",
-          "*.bmp",
-          "*.tiff"
+          "haarcascade_frontalface_alt.xml",
+          "karim.jpeg",
+          "download.jpg",
+          "images.jpg",
+          "cristiano-ronaldo-of-portugal-reacts-as-he-looks-on-during-news-photo-1725633476.jpg",
+          "download.jpeg",
+          "fourier_karim.jpeg",
+          "convolution_karim.jpeg",
+          "opencv_karim.jpeg",
+          "opencv_images.jpg",
+          "opencv_cristiano-ronaldo-of-portugal-reacts-as-he-looks-on-during-news-photo-1725633476.jpg",
+          "opencv_download.jpg",
+          "fourier_images.jpg",
+          "fourier_cristiano-ronaldo-of-portugal-reacts-as-he-looks-on-during-news-photo-1725633476.jpg",
+          "fourier_download.jpg",
+          "convolution_images.jpg",
+          "convolution_cristiano-ronaldo-of-portugal-reacts-as-he-looks-on-during-news-photo-1725633476.jpg",
+          "convolution_download.jpg",
+          "opencv_download.jpeg",
+          "fourier_download.jpeg",
+          "convolution_download.jpeg"
         ]
       }
     }
