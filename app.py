@@ -120,15 +120,15 @@ def process_image(image_path):
     conv_time = time.time() - start_time_conv
     results['convolution'] = {'image': image_conv, 'time': conv_time}
 
-    # Method 3: Fourier domain
-    start_time_fourier = time.time()
-    for (x, y, w, h) in face_data:
-        cv2.rectangle(image_fourier, (x, y), (x + w, y + h), (0, 255, 0), 2)
-        roi = image_fourier[y:y+h, x:x+w]
-        roi = gaussian_blur_fourier(roi, 23, 30)
-        image_fourier[y:y+roi.shape[0], x:x+roi.shape[1]] = roi
-    fourier_time = time.time() - start_time_fourier
-    results['fourier'] = {'image': image_fourier, 'time': fourier_time}
+    # # Method 3: Fourier domain
+    # start_time_fourier = time.time()
+    # for (x, y, w, h) in face_data:
+    #     cv2.rectangle(image_fourier, (x, y), (x + w, y + h), (0, 255, 0), 2)
+    #     roi = image_fourier[y:y+h, x:x+w]
+    #     roi = gaussian_blur_fourier(roi, 23, 30)
+    #     image_fourier[y:y+roi.shape[0], x:x+roi.shape[1]] = roi
+    # fourier_time = time.time() - start_time_fourier
+    # results['fourier'] = {'image': image_fourier, 'time': fourier_time}
 
     # Save the results
     image_results = {}
