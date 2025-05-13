@@ -1,6 +1,6 @@
-numpy==1.21.6
-opencv-python-headless==4.5.5.64
-scipy==1.7.3
-flask==2.0.3
-Werkzeug==2.0.3
-Pillow==8.4.0
+numpy==2.2.5
+opencv-python-headless==4.9.0.80
+scipy==1.12.0
+flask==3.0.2
+Werkzeug==3.0.1
+Pillow==10.2.0
