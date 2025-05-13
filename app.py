@@ -28,17 +28,11 @@ def create_gaussian_kernel(size, sigma):
 
 
 def gaussian_blur_convolution(image, kernel_size, sigma):
-    # Create the Gaussian kernel
+    # Create Gaussian kernel
     kernel = create_gaussian_kernel(kernel_size, sigma)
 
-    # Apply convolution to each channel separately if the image is colored
-    if len(image.shape) == 3:
-        result = np.zeros_like(image)
-        for i in range(3):
-            result[:, :, i] = ndimage.convolve(image[:, :, i], kernel)
-        return result
-    else:
-        return ndimage.convolve(image, kernel)
+    # Apply convolution
+    return ndimage.convolve(image, kernel, mode='reflect')
 
 # Function to apply Gaussian blur using Fourier transform (analytical method)
 
@@ -96,7 +90,6 @@ def process_image(image_path):
     # Create copies for each method
     image_cv2 = image.copy()
     image_conv = image.copy()
-    image_fourier = image.copy()
 
     results = {}
 
@@ -119,16 +112,6 @@ def process_image(image_path):
         image_conv[y:y+roi.shape[0], x:x+roi.shape[1]] = roi
     conv_time = time.time() - start_time_conv
     results['convolution'] = {'image': image_conv, 'time': conv_time}
-
-    # # Method 3: Fourier domain
-    # start_time_fourier = time.time()
-    # for (x, y, w, h) in face_data:
-    #     cv2.rectangle(image_fourier, (x, y), (x + w, y + h), (0, 255, 0), 2)
-    #     roi = image_fourier[y:y+h, x:x+w]
-    #     roi = gaussian_blur_fourier(roi, 23, 30)
-    #     image_fourier[y:y+roi.shape[0], x:x+roi.shape[1]] = roi
-    # fourier_time = time.time() - start_time_fourier
-    # results['fourier'] = {'image': image_fourier, 'time': fourier_time}
 
     # Save the results
     image_results = {}

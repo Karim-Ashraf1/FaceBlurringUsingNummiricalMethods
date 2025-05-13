@@ -2,9 +2,8 @@
 
 This web application demonstrates three different methods for blurring faces in images:
 
-1. OpenCV's built-in GaussianBlur
-2. Custom numerical convolution
-3. Fourier domain filtering
+1. OpenCV's GaussianBlur
+2. Numerical Convolution
 
 The application allows users to upload an image, detects faces in the image, and applies all three blurring methods. It then displays the results side by side with timing information.
 
@@ -39,14 +38,10 @@ The application allows users to upload an image, detects faces in the image, and
 
 ## Numerical Methods
 
-### OpenCV GaussianBlur
+### OpenCV's GaussianBlur
 
-Uses OpenCV's optimized implementation of Gaussian blur
+Uses OpenCV's built-in GaussianBlur function for face blurring
 
-### Custom Numerical Convolution
+### Numerical Convolution
 
-Implements Gaussian blur using direct convolution with a manually created Gaussian kernel
-
-### Fourier Domain Filtering
-
-Applies Gaussian blur in the frequency domain using the Fourier transform
+Implements Gaussian blur using numerical convolution with a custom kernel

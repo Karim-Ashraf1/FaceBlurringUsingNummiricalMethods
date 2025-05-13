@@ -22,20 +22,15 @@
         </div>
 
         <div class="row mb-4">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <h2>OpenCV GaussianBlur</h2>
                 <img src="{{ results.opencv.img_src }}" alt="OpenCV Blur" class="result-img">
                 <p class="timing">Processing time: <span class="method-title">{{ results.opencv.time }}</span></p>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <h2>Numerical Convolution</h2>
                 <img src="{{ results.convolution.img_src }}" alt="Numerical Convolution" class="result-img">
                 <p class="timing">Processing time: <span class="method-title">{{ results.convolution.time }}</span></p>
-            </div>
-            <div class="col-md-4">
-                <h2>Fourier Domain Filtering</h2>
-                <img src="{{ results.fourier.img_src }}" alt="Fourier Domain" class="result-img">
-                <p class="timing">Processing time: <span class="method-title">{{ results.fourier.time }}</span></p>
             </div>
         </div>
 
