@@ -33,18 +33,11 @@ ENV/
 .vercel
 .now
 
-# Temporary files
-/tmp
-static/uploads/*
-static/results/*
+# Project specific
+static/uploads/
+static/results/
 !static/uploads/.gitkeep
 !static/results/.gitkeep
-
-# IDEs and editors
-.idea/
-.vscode/
-*.swp
-*.swo
 
 # Large files
 *.xml
@@ -52,6 +45,19 @@ static/results/*
 *.pkl
 *.model
 *.weights
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.tiff
+*.ico
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*.swo
 
 # Logs
 *.log 
