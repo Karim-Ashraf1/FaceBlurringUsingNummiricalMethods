@@ -1,10 +1,11 @@
-import os 
-import cv2 
-import numpy as np  
+import os
+import cv2
+import numpy as np
 from scipy import ndimage  # for image processing
 from flask import Flask, request, render_template, redirect, url_for, flash
 import base64  # for converting images to text
 from werkzeug.utils import secure_filename  # for making filenames safe
+import time  # for measuring processing time
 
 
 def create_gaussian_kernel(size, sigma):
@@ -23,7 +24,6 @@ def create_gaussian_kernel(size, sigma):
     return kernel / np.sum(kernel)
 
 
-
 def gaussian_blur_convolution(image, kernel_size, sigma):
     # Make our blur filter
     kernel = create_gaussian_kernel(kernel_size, sigma)
@@ -38,8 +38,6 @@ def gaussian_blur_convolution(image, kernel_size, sigma):
     else:
         # If image is black and white, just blur once
         return ndimage.convolve(image, kernel)
-
-
 
 
 def gaussian_blur_fourier(image, kernel_size, sigma):
@@ -58,10 +56,10 @@ def gaussian_blur_fourier(image, kernel_size, sigma):
 
 # Create our web app
 app = Flask(__name__)
-app.secret_key = 'face_blurring_app'  
-app.config['UPLOAD_FOLDER'] = 'static/uploads'  
+app.secret_key = 'face_blurring_app'
+app.config['UPLOAD_FOLDER'] = 'static/uploads'
 app.config['RESULT_FOLDER'] = 'static/results'
-app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg'}  
+app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg'}
 
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 os.makedirs(app.config['RESULT_FOLDER'], exist_ok=True)
@@ -69,7 +67,6 @@ os.makedirs(app.config['RESULT_FOLDER'], exist_ok=True)
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
-
 
 
 def process_image(image_path):
@@ -102,6 +99,7 @@ def process_image(image_path):
     results = {}
 
     # Method 1: Use OpenCV's built-in blur
+    start_time = time.time()  # Start timing
     for (x, y, w, h) in face_data:
         # Draw a green box around the face
         cv2.rectangle(image_cv2, (x, y), (x + w, y + h), (0, 255, 0), 2)
@@ -111,23 +109,30 @@ def process_image(image_path):
         roi = cv2.GaussianBlur(roi, (23, 23), 30)
         # Put the blurred face back
         image_cv2[y:y+roi.shape[0], x:x+roi.shape[1]] = roi
-    results['opencv'] = {'image': image_cv2}
+    cv2_time = time.time() - start_time  # End timing
+    results['opencv'] = {'image': image_cv2, 'time': f"{cv2_time:.4f} seconds"}
 
     # Method 2: Use our custom blur
+    start_time = time.time()  # Start timing
     for (x, y, w, h) in face_data:
         cv2.rectangle(image_conv, (x, y), (x + w, y + h), (0, 255, 0), 2)
         roi = image_conv[y:y+h, x:x+w]
         roi = gaussian_blur_convolution(roi, 23, 30)
         image_conv[y:y+roi.shape[0], x:x+roi.shape[1]] = roi
-    results['convolution'] = {'image': image_conv}
+    conv_time = time.time() - start_time  # End timing
+    results['convolution'] = {'image': image_conv,
+                              'time': f"{conv_time:.4f} seconds"}
 
     # Method 3: Use Fourier transform blur
+    start_time = time.time()  # Start timing
     for (x, y, w, h) in face_data:
         cv2.rectangle(image_fourier, (x, y), (x + w, y + h), (0, 255, 0), 2)
         roi = image_fourier[y:y+h, x:x+w]
         roi = gaussian_blur_fourier(roi, 23, 30)
         image_fourier[y:y+roi.shape[0], x:x+roi.shape[1]] = roi
-    results['fourier'] = {'image': image_fourier}
+    fourier_time = time.time() - start_time  # End timing
+    results['fourier'] = {'image': image_fourier,
+                          'time': f"{fourier_time:.4f} seconds"}
 
     # Save all the results
     image_results = {}
@@ -145,11 +150,11 @@ def process_image(image_path):
         img_base64 = base64.b64encode(buffer).decode('utf-8')
 
         image_results[method] = {
-            'img_src': f"data:image/jpeg;base64,{img_base64}"
+            'img_src': f"data:image/jpeg;base64,{img_base64}",
+            'time': data['time']  # Include the timing information
         }
 
     return image_results, None
-
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -188,13 +193,12 @@ def index():
 
             # Show the results
             return render_template('result.html',
-                                    original_img=f"data:image/jpeg;base64,{orig_img_base64}",
-                                    results=results 
-                                    )
+                                   original_img=f"data:image/jpeg;base64,{orig_img_base64}",
+                                   results=results
+                                   )
 
     # If it's a GET request, show the upload form
     return render_template('index.html')
-
 
 
 @app.route('/simple-upload', methods=['GET'])
@@ -204,4 +208,4 @@ def simple_upload():
 
 # Run the app
 if __name__ == '__main__':
-    app.run(debug=True) 
+    app.run(debug=True)

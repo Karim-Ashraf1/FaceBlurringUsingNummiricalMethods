@@ -7,6 +7,30 @@
     <title>Bluro</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+    <style>
+        /* Modal styling to match dark theme */
+        .modal-content {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            border: 1px solid #333;
+        }
+        .modal-header {
+            border-bottom: 1px solid #333;
+        }
+        .modal-footer {
+            border-top: 1px solid #333;
+        }
+        .btn-close {
+            filter: invert(1) grayscale(100%) brightness(200%);
+        }
+        .method-item {
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+        .method-item:hover {
+            opacity: 0.8;
+        }
+    </style>
 </head>
 
 <body>
@@ -41,13 +65,86 @@
                 This application demonstrates three different face blurring methods:
             </p>
             <div class="methods-container">
-                <div class="method-item">OpenCV's GaussianBlur</div>
-                <div class="method-item">Custom Numerical Convolution</div>
-                <div class="method-item">Fourier Domain Filtering</div>
+                <div class="method-item" data-bs-toggle="modal" data-bs-target="#opencvModal">OpenCV's GaussianBlur</div>
+                <div class="method-item" data-bs-toggle="modal" data-bs-target="#convolutionModal">Custom Numerical Convolution</div>
+                <div class="method-item" data-bs-toggle="modal" data-bs-target="#fourierModal">Fourier Domain Filtering</div>
             </div>
         </div>
     </div>
 
+    <!-- OpenCV Modal -->
+    <div class="modal fade" id="opencvModal" tabindex="-1" aria-labelledby="opencvModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="opencvModalLabel">OpenCV's GaussianBlur</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>OpenCV's GaussianBlur is a highly optimized implementation of Gaussian blurring that uses:</p>
+                    <ul>
+                        <li>Pre-optimized C++ code for maximum performance</li>
+                        <li>SIMD (Single Instruction Multiple Data) instructions</li>
+                        <li>Multi-threading capabilities</li>
+                    </ul>
+                    <p>This method is typically the fastest as it's specifically designed for image processing tasks.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Convolution Modal -->
+    <div class="modal fade" id="convolutionModal" tabindex="-1" aria-labelledby="convolutionModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="convolutionModalLabel">Custom Numerical Convolution</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Custom Numerical Convolution implements Gaussian blur using:</p>
+                    <ul>
+                        <li>Direct convolution with a Gaussian kernel</li>
+                        <li>Mathematical operations on each pixel</li>
+                        <li>Separate processing for RGB channels</li>
+                    </ul>
+                    <p>This method demonstrates the mathematical principles behind image blurring but may be slower than OpenCV's implementation.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fourier Modal -->
+    <div class="modal fade" id="fourierModal" tabindex="-1" aria-labelledby="fourierModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="fourierModalLabel">Fourier Domain Filtering</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Fourier Domain Filtering uses:</p>
+                    <ul>
+                        <li>Fast Fourier Transform (FFT) to convert image to frequency domain</li>
+                        <li>Multiplication with a Gaussian filter in frequency domain</li>
+                        <li>Inverse FFT to get back to spatial domain</li>
+                    </ul>
+                    <p>This method can be more efficient for large images but has higher computational overhead for small images.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // JavaScript for drag and drop functionality
         const uploadArea = document.getElementById('uploadArea');
